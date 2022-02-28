@@ -1,23 +1,52 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import ListItem from "./ListItem.js";
+import { useState, useRef, useEffect } from "react";
 
 function App() {
+  const [listItems, setListItems] = useState([{ text: "", key: 0 }]);
+  const keyRef = useRef(0);
+
+  useEffect(() => {
+    const key = JSON.parse(localStorage.getItem("key"));
+    const listItemsLocal = JSON.parse(localStorage.getItem("listItems"));
+
+    if (key !== null) {
+      keyRef.current = parseInt(key);
+    }
+    if (listItemsLocal !== null) {
+      setListItems(listItemsLocal);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("key", keyRef.current.toString());
+  }, [keyRef.current]);
+
+  useEffect(() => {
+    localStorage.setItem("listItems", JSON.stringify(listItems));
+  }, [listItems]);
+
+  const generateKey = () => {
+    const key = keyRef.current + 1;
+    keyRef.current = key;
+    return key;
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <header>Simple To-Do</header>
+      <form id="todo-form">
+        {listItems.map((item, index) => (
+          <ListItem
+            item={item}
+            index={index}
+            listItems={listItems}
+            setListItems={setListItems}
+            generateKey={generateKey}
+            key={item.key.toString()}
+          />
+        ))}
+      </form>
     </div>
   );
 }
