@@ -19,11 +19,8 @@ function App() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("key", keyRef.current.toString());
-  }, [keyRef.current]);
-
-  useEffect(() => {
     localStorage.setItem("listItems", JSON.stringify(listItems));
+    localStorage.setItem("key", keyRef.current.toString());
   }, [listItems]);
 
   const generateKey = () => {
