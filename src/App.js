@@ -41,6 +41,7 @@ function App() {
             setListItems={setListItems}
             generateKey={generateKey}
             key={item.key.toString()}
+            hasButton={index !== listItems.length - 1}
           />
         ))}
       </form>
